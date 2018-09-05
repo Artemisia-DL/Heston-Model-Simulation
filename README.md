@@ -1,3 +1,7 @@
+# Disclamer
+This project was done while studing Heston Model for personal interest. Therefore the code leaves room to many improvements especially on the side of optimization and speed. The main aim was didatic, hence it may lack of elegance and precision, but I hope it maybe usefull to anyone and I encourage the few interested to improve it. I also tried to comment as clearly as possible the code, in order to mirror the Andersen paper (2007). 
+I also thank TORBJÖRN ODELMAN whose Thesis ( Efficient Monte Carlo Simulation with Stochastic Volatility, 2009 ) inspired this project and from which I took and adapted the text below in order to better match my code. 
+
 # Heston-Model-Simulation
 Heston Model Numerical Simulation with QE  Discretization Algorithm as in Andersen, L., (2007)
 
@@ -41,32 +45,34 @@ Further, with the aid of moment-matching techniques Andersen shows that:
 
 With these constants defined, for some critical level ψc ∈ [1,2] ( set at 1.5 in Andersen )  we can formulate the QE algorithm for the variance process, which is what is found in the function *variancenew*
 
-1. Given Vt, compute m and s2 and ψ = s2/m2
-2. if ψ ≤ ψc :
-(a) Compute a and b from
-(b) Generate a standard Gaussian random number, ZV
-(c) Set Vt+∆ = a(b + ZV )2
-3. else, if ψ > ψc :
-(a) Compute β and p from (4.22)
-(b) Generate a uniform random number, UV
-(c) Set Vt+∆ = L−1(UV )
+        1. Given Vt, compute m and s2 and ψ = s2/m2
+        2. if ψ ≤ ψc :
+        (a) Compute a and b from
+        (b) Generate a standard Gaussian random number, ZV
+        (c) Set Vt+∆ = a(b + ZV )2
+        3. else, if ψ > ψc :
+        (a) Compute β and p from (4.22)
+        (b) Generate a uniform random number, UV
+        (c) Set Vt+∆ = L−1(UV )
 
 According to Andersen the exact choice of ψc is not of great importance. We later use ψc = 1.5 in our numerical tests. Because of the desirable correlation between the asset price and the variance, an Euler-like X-process leads to flaws, if combined with the QE scheme for the variance, see. Instead, one is suggested to look at the properties of the exact representation of X, derived in. The following scheme is proposed:
-Xt+∆ = Xt + r∆ + K0 + K1Vt + K2*Vt+∆ + (K3Vt + K4Vt+∆)^0.5 *Z 
-where Z is a standard Gaussian random variable, not correlated with the random variables in the V -process, and
-K0 = −ρκθ∆/η
-K1 = γ1∆κρ
-η
-−
-1 2
- − ρ
-η
-,
-K2 = γ2∆κρ
-η
-−
-1 2
- + ρ
-η
-, K3 = γ1∆(1 − ρ2),
-K4 = γ2∆(1 − ρ2), γ1,γ2 ∈ [0,1]
+
+        Xt+∆ = Xt + r∆ + K0 + K1Vt + K2*Vt+∆ + (K3Vt + K4Vt+∆)^0.5 *Z 
+        
+where Z is a standard Gaussian random variable, not correlated with the random variables in the Variance-process, and
+        
+        K0 = −ρκθ∆/η
+        K1 = γ1*∆*(κρ/η − 0.5)− ρ/η
+        K2 = γ2∆(κρ/η−0.5)+ ρ/η
+        K3 = γ1*∆*(1 − ρ^2)
+        K4 = γ2*∆(1 − ρ^2), γ1,γ2 ∈ [0,1]   
+        Where γ1,γ2 are the "averaging" coefficient to calculate the mean Variance between t and t+∆
+        
+# Simulation Engine
+
+The simulation function runs simulations while periodically checking for convergence  accuracy level (more on this in the code notes).
+Moreover, it saves ALL the paths generated and some statistic about each path ( such as min, max price which are useful in case of sigle barrier pricing ). Note that this feature makes the algorithm computationaly slow and it can be easily avoid for Barrier Pricing, nevertheless it is usuful during tests, hence is left. 
+
+Once the accuracy level is reached or the usuer stop the simulation the fucntion also generates many plots to better visualize what went on during the simulation. Some of these plots are base on the paths data ( see above ) that were collected and saved. Again, not useful for the mere sake of the simualtion and easily optimizable. 
+
+
