@@ -1,11 +1,15 @@
 # Disclamer
 This project was done while studing Heston Model for personal interest. Therefore the code leaves room to many improvements especially on the side of optimization and speed. The main aim was didatic, hence it may lack of elegance and precision, but I hope it maybe usefull to anyone and I encourage the few interested to improve it. I also tried to comment as clearly as possible the code, in order to mirror the Andersen paper (2007). 
+
 I also thank TORBJÖRN ODELMAN whose Thesis ( Efficient Monte Carlo Simulation with Stochastic Volatility, 2009 ) inspired this project and from which I took and adapted the text below in order to better match my code. 
+
+I strongly suggest the to read the Thesis above, accessible at this link: https://pdfs.semanticscholar.org/f155/24f29b9aebc3a241b8cdb3ed101162b66e57.pdf
 
 # Heston-Model-Simulation
 Heston Model Numerical Simulation with QE  Discretization Algorithm as in Andersen, L., (2007)
 
 Heston Model Original Formulation:
+   
     dSt = µ*St*dt + Vt^0.5 * St * dWt1      Security Price SDE
     dVt = κ(θ − Vt)dt + η*Vt^0.5 *dWt2      Variance SDE
 
@@ -19,14 +23,14 @@ The Quadratic Exponential (QE) scheme is an algorithm specifically developed for
 
 1. With a moderate or high non-centrality parameter a non-central chi-square can be represented by a power function applied to a Gaussian variable. Hence, for sufficiently large values of Vt, one can write
 
-    Vt+∆ = a(b + ZV )^2
+        Vt+∆ = a(b + ZV )^2
                      
 where a and b are constants depending on Vt and ∆, and ZV is a standard Gaussian random variable.
 
 2. For low values of Vt, one can approximate the density of Vt+∆ by
-
-    Vt+∆ = L^(−1)(u) =   0                          if 0 ≤ u < p
-                         β^(-1)*ln((1−p)/(1-u) )    if p < u ≤ 1 
+        
+        Vt+∆ = L^(−1)(u) =   0                          if 0 ≤ u < p
+                             β^(-1)*ln((1−p)/(1-u) )    if p < u ≤ 1 
                      
 Then, sampling is done by Vt+∆ = L−1(UV ), where u is a uniform random number.
 
@@ -37,6 +41,7 @@ First, to simplify the outline it is convenient to introduce the following varia
     ψ = s^2/m^2
 
 Further, with the aid of moment-matching techniques Andersen shows that:
+    
     b2 = 2ψ^(−1) − 1 + 2(2ψ^(−1))^0.5 * (2ψ^(−1) − 1)^0.5
     a = m/(1 + b2)
     p = (ψ − 1)/(ψ + 1)
