@@ -5,6 +5,8 @@ I also thank TORBJÖRN ODELMAN whose Thesis ( Efficient Monte Carlo Simulation w
 
 I strongly suggest the to read the Thesis above, accessible at this link: https://pdfs.semanticscholar.org/f155/24f29b9aebc3a241b8cdb3ed101162b66e57.pdf
 
+
+
 # Heston-Model-Simulation
 Heston Model Numerical Simulation with QE  Discretization Algorithm as in Andersen, L., (2007)
 
